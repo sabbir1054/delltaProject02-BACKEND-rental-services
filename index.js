@@ -25,6 +25,8 @@ async function run() {
     await client.connect();
     //create collection
     const usersCollection = client.db("rentalService").collection("users");
+    const resultsCollection = client.db("rentalService").collection("results");
+    const coursesCollection = client.db("rentalService").collection("courses");
 
     //users get method
     app.get("/users", async (req, res) => {
@@ -33,6 +35,20 @@ async function run() {
       const users = await cursor.toArray();
       res.send(users);
     });
+    //results get method
+    app.get("/results", async (req, res) => {
+      const query = {};
+      const cursor = resultsCollection.find(query);
+      const results = await cursor.toArray();
+      res.send(results);
+    });
+    //courses get method
+    app.get("/courses", async (req, res) => {
+      const query = {};
+      const cursor = coursesCollection.find(query);
+      const courses = await cursor.toArray();
+      res.send(courses);
+    });
 
     // get single user
     app.get("/users/:email", async (req, res) => {
@@ -40,6 +56,14 @@ async function run() {
       const query = { email: email };
       const user = await usersCollection.findOne(query);
       res.send(user);
+    });
+
+    // get single results
+    app.get("/results/:studentId", async (req, res) => {
+      const studentId = req.params.studentId;
+      const query = { studentId: studentId };
+      const result = await resultsCollection.findOne(query);
+      res.send(result);
     });
 
     //post a user
