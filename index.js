@@ -65,6 +65,14 @@ async function run() {
       const result = await resultsCollection.findOne(query);
       res.send(result);
     });
+    // get single course
+    app.get("/courses/:courseId", async (req, res) => {
+      const courseId = req.params.courseId;
+      const query = { courseId: courseId };
+      const result = await coursesCollection.findOne(query);
+      res.send(result);
+    });
+    
 
     //post a user
     app.post("/users", async (req, res) => {
