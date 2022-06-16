@@ -35,6 +35,30 @@ async function run() {
       const users = await cursor.toArray();
       res.send(users);
     });
+
+    //Update users data
+
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const updateInfo = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: req.body.name,
+          mobile: req.body.mobile,
+          address: req.body.address,
+        },
+      };
+
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.json(result);
+    });
+
     //results get method
     app.get("/results", async (req, res) => {
       const query = {};
@@ -59,9 +83,9 @@ async function run() {
     });
 
     // get single results
-    app.get("/results/:studentId", async (req, res) => {
-      const studentId = req.params.studentId;
-      const query = { studentId: studentId };
+    app.get("/results/:email", async (req, res) => {
+      const studentId = req.params.email;
+      const query = { email: email };
       const result = await resultsCollection.findOne(query);
       res.send(result);
     });
@@ -72,7 +96,6 @@ async function run() {
       const result = await coursesCollection.findOne(query);
       res.send(result);
     });
-    
 
     //post a user
     app.post("/users", async (req, res) => {
@@ -80,8 +103,6 @@ async function run() {
       const result = await usersCollection.insertOne(newUser);
       res.send(result);
     });
-      
-      
   } finally {
   }
 }
