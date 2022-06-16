@@ -84,7 +84,7 @@ async function run() {
 
     // get single results
     app.get("/results/:email", async (req, res) => {
-      const studentId = req.params.email;
+      const email = req.params.email;
       const query = { email: email };
       const result = await resultsCollection.findOne(query);
       res.send(result);
