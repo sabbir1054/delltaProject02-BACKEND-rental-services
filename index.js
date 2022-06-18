@@ -27,6 +27,7 @@ async function run() {
     const usersCollection = client.db("rentalService").collection("users");
     const resultsCollection = client.db("rentalService").collection("results");
     const coursesCollection = client.db("rentalService").collection("courses");
+    const enrolledCollection = client.db("rentalService").collection("enrolledStudent");
 
     //users get method
     app.get("/users", async (req, res) => {
@@ -72,6 +73,20 @@ async function run() {
       const cursor = coursesCollection.find(query);
       const courses = await cursor.toArray();
       res.send(courses);
+    });
+    //all subject enrolled student get method
+    app.get("/enrolledStudents", async (req, res) => {
+      const query = {};
+      const cursor = enrolledCollection.find(query);
+      const enrolledStudent = await cursor.toArray();
+      res.send(enrolledStudent);
+    });
+    //single subject enrolled student get method
+    app.get("/enrolledStudents/:courseId", async (req, res) => {
+      const courseId = req.params.courseId;
+      const query = { courseId: courseId };
+      const user = await enrolledCollection.findOne(query);
+      res.send(user);
     });
 
     // get single user
