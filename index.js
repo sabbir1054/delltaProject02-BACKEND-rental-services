@@ -37,6 +37,33 @@ async function run() {
       res.send(users);
     });
 
+    //Update result data
+
+    app.put("/results/:email/:courseId", async (req, res) => {
+      const email = req.params.email;
+      const courseId = req.params.courseId;
+      const updateInfo = req.body;
+      const filter = { "email": email , "results.courseId":courseId};
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          "results.$.quiz1": req.body.quiz1,
+          "results.$.quiz2": req.body.quiz2,
+          "results.$.quiz3": req.body.quiz3,
+          "results.$.assignment": req.body.assignment,
+          "results.$.presentation": req.body.presentation,
+          "results.$.mid": req.body.mid,
+          "results.$.final": req.body.final,
+        },
+      };
+
+      const result = await resultsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.json(result);
+    });
     //Update users data
 
     app.put("/users/:email", async (req, res) => {
@@ -46,9 +73,7 @@ async function run() {
       const options = { upsert: true };
       const updateDoc = {
         $set: {
-          name: req.body.name,
-          mobile: req.body.mobile,
-          address: req.body.address,
+          "results.$.quiz1": req.body.quiz1
         },
       };
 
