@@ -27,6 +27,7 @@ async function run() {
     const usersCollection = client.db("rentalService").collection("users");
     const resultsCollection = client.db("rentalService").collection("results");
     const coursesCollection = client.db("rentalService").collection("courses");
+    const attendanceCollection = client.db("rentalService").collection("attendance");
 
     //users get method
     app.get("/users", async (req, res) => {
@@ -85,6 +86,12 @@ async function run() {
       );
       res.json(result);
     });
+
+
+
+
+
+
     //Update users data
 
     app.put("/updateBalance/:email", async (req, res) => {
@@ -105,6 +112,35 @@ async function run() {
       );
       res.json(result);
     });
+    // //Update user courses data
+
+    // app.put("/users/:email", async (req, res) => {
+    //   const email = req.params.email;
+    //   const updateInfo = req.body;
+    //   const filter = { email: email };
+    //   const options = { upsert: true };
+    //   const updateDoc = {
+    //     $set: {
+    //       courses:[req.body.courseId]
+    //     },
+    //   };
+
+    //   const result = await usersCollection.updateOne(
+    //     filter,
+    //     updateDoc,
+    //     options
+    //   );
+    //   res.json(result);
+    // });
+
+
+
+
+
+
+
+
+
 
     //results get method
     app.get("/results", async (req, res) => {
@@ -113,6 +149,32 @@ async function run() {
       const results = await cursor.toArray();
       res.send(results);
     });
+
+
+
+
+    //single attendance get method
+    app.get("/attendance/", async (req, res) => {
+      
+      const query = {};
+      const cursor = attendanceCollection.find(query);
+      const results = await cursor.toArray();
+      res.send(results);
+    });
+    //single attendance get method
+    app.get("/attendance/:courseId", async (req, res) => {
+      const courseId = req.params.courseId;
+      const query = {courseId:courseId};
+      const cursor = attendanceCollection.find(query);
+      const results = await cursor.toArray();
+      res.send(results);
+    });
+
+
+
+
+
+
     //courses get method
     app.get("/courses", async (req, res) => {
       const query = {};
@@ -150,10 +212,28 @@ async function run() {
       const result = await usersCollection.insertOne(newUser);
       res.send(result);
     });
+
+
+
+    //post a day attendance
+    app.post("/attendance", async (req, res) => {
+      const newUser = req.body;
+      const result = await attendanceCollection.insertOne(newUser);
+      res.send(result);
+    });
+
+
+
     //post a courses
     app.post("/courses", async (req, res) => {
       const newCourse = req.body;
       const result = await coursesCollection.insertOne(newCourse);
+      res.send(result);
+    });
+    //post a result
+    app.post("/results", async (req, res) => {
+      const newResult = req.body;
+      const result = await resultsCollection.insertOne(newResult);
       res.send(result);
     });
 
@@ -164,6 +244,11 @@ async function run() {
       const result = await coursesCollection.deleteOne(query);
       res.json(result);
     });
+
+
+
+
+
   } finally {
   }
 }
