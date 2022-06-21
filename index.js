@@ -130,6 +130,20 @@ async function run() {
       const result = await usersCollection.insertOne(newUser);
       res.send(result);
     });
+    //post a courses
+    app.post("/courses", async (req, res) => {
+      const newCourse = req.body;
+      const result = await coursesCollection.insertOne(newCourse);
+      res.send(result);
+    });
+
+
+
+
+
+
+
+
   } finally {
   }
 }
