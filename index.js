@@ -72,7 +72,10 @@ async function run() {
       const options = { upsert: true };
       const updateDoc = {
         $set: {
-          "results.$.quiz1": req.body.quiz1,
+          name: req.body.name,
+          mobile: req.body.mobile,
+          address: req.body.address,
+          balance:req.body.balance,
         },
       };
 
