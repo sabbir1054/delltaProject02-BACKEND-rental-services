@@ -75,7 +75,26 @@ async function run() {
           name: req.body.name,
           mobile: req.body.mobile,
           address: req.body.address,
-          balance:req.body.balance,
+        },
+      };
+
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.json(result);
+    });
+    //Update users data
+
+    app.put("/updateBalance/:email", async (req, res) => {
+      const email = req.params.email;
+      const updateInfo = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          balance:req.body.balance
         },
       };
 
