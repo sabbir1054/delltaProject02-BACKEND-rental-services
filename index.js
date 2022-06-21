@@ -161,10 +161,19 @@ async function run() {
       const results = await cursor.toArray();
       res.send(results);
     });
-    //single attendance get method
+    //single subject attendance get method
     app.get("/attendance/:courseId", async (req, res) => {
       const courseId = req.params.courseId;
       const query = {courseId:courseId};
+      const cursor = attendanceCollection.find(query);
+      const results = await cursor.toArray();
+      res.send(results);
+    });
+    //single  attendance get method
+    app.get("/attendance/:courseId/:date", async (req, res) => {
+      const courseId = req.params.courseId;
+      const date = req.params.date;
+      const query = {courseId:courseId,date:date};
       const cursor = attendanceCollection.find(query);
       const results = await cursor.toArray();
       res.send(results);
