@@ -27,7 +27,6 @@ async function run() {
     const usersCollection = client.db("rentalService").collection("users");
     const resultsCollection = client.db("rentalService").collection("results");
     const coursesCollection = client.db("rentalService").collection("courses");
-    
 
     //users get method
     app.get("/users", async (req, res) => {
@@ -43,7 +42,7 @@ async function run() {
       const email = req.params.email;
       const courseId = req.params.courseId;
       const updateInfo = req.body;
-      const filter = { "email": email , "results.courseId":courseId};
+      const filter = { email: email, "results.courseId": courseId };
       const options = { upsert: true };
       const updateDoc = {
         $set: {
@@ -73,7 +72,7 @@ async function run() {
       const options = { upsert: true };
       const updateDoc = {
         $set: {
-          "results.$.quiz1": req.body.quiz1
+          "results.$.quiz1": req.body.quiz1,
         },
       };
 
@@ -99,7 +98,6 @@ async function run() {
       const courses = await cursor.toArray();
       res.send(courses);
     });
-
 
     // get single user
     app.get("/users/:email", async (req, res) => {
@@ -137,13 +135,13 @@ async function run() {
       res.send(result);
     });
 
-
-
-
-
-
-
-
+    // delete course api
+    app.delete("/courses/:deleteId", async (req, res) => {
+      const id = req.params.deleteId;
+      const query = { _id: ObjectId(id) };
+      const result = await coursesCollection.deleteOne(query);
+      res.json(result);
+    });
   } finally {
   }
 }
