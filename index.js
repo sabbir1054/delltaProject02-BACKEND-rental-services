@@ -11,6 +11,16 @@ app.use(cors());
 app.use(express.json());
 
 
+//make date
+
+ // date and time
+  const today = new Date();
+  const date =
+    today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+
+
+
+
 //mongodb
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dwqsj4c.mongodb.net/?retryWrites=true&w=majority`;
@@ -226,6 +236,7 @@ async function run() {
 
     //post a day attendance
     app.post("/attendance", async (req, res) => {
+      req.body.date = `${date}`;
       const newUser = req.body;
       const result = await attendanceCollection.insertOne(newUser);
       res.send(result);
